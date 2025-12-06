@@ -11,6 +11,7 @@ namespace Application.Activities.Queries
 {
     public class GetActivityList
     {
+        
         public class Query : IRequest<List<Activity>> {}
 
         public class Handler(AppDbContext context) : IRequestHandler<Query, List<Activity>>
