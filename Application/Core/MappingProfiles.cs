@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Activities.DTOs;
+using Application.Profiles.DTOs;
 using AutoMapper;
 using Domain;
 
@@ -15,7 +16,17 @@ namespace Application.Core
             CreateMap<Activity, Activity>();
             CreateMap<CreateActivityDTO, Activity>();
             CreateMap<EditActivityDTO, Activity>();
+            CreateMap<Activity, ActivityDTO>()
+                .ForMember(d => d.HostDisplayName, o => o.MapFrom(s =>
+                    s.Attendees.FirstOrDefault(x => x.IsHost)!.User.DisplayName))
+                .ForMember(d => d.HostId, o => o.MapFrom(s =>
+                    s.Attendees.FirstOrDefault(x => x.IsHost)!.User.Id));
 
+            CreateMap<ActivityAtendee, UserProfile>()
+                .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.User.DisplayName))
+                .ForMember(d => d.Bio, o => o.MapFrom(s => s.User.Bio))
+                .ForMember(d => d.ImagrUrl, o => o.MapFrom(s => s.User.ImageUrl))
+                .ForMember(d => d.Id, o => o.MapFrom(s => s.User.Id));
         }
     }
 }

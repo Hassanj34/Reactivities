@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Activities.DTOs;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -11,14 +14,16 @@ namespace Application.Activities.Queries
 {
     public class GetActivityList
     {
-        
-        public class Query : IRequest<List<Activity>> {}
 
-        public class Handler(AppDbContext context) : IRequestHandler<Query, List<Activity>>
+        public class Query : IRequest<List<ActivityDTO>> { }
+
+        public class Handler(AppDbContext context, IMapper mapper) : IRequestHandler<Query, List<ActivityDTO>>
         {
-            public async Task<List<Activity>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<List<ActivityDTO>> Handle(Query request, CancellationToken cancellationToken)
             {
-                return await context.Activities.ToListAsync(cancellationToken);
+                return await context.Activities
+                    .ProjectTo<ActivityDTO>(mapper.ConfigurationProvider)
+                    .ToListAsync(cancellationToken);
             }
         }
     }
