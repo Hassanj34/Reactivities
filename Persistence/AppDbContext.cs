@@ -8,6 +8,7 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<User>(op
 {
     public required DbSet<Activity> Activities { get; set; }
     public required DbSet<ActivityAtendee> ActivityAtendees { get; set; }
+    public required DbSet<Photo> Photos { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

@@ -14,5 +14,6 @@ namespace Domain
 
         //navigation props
         public ICollection<ActivityAtendee> Activities { get; set; } = [];
+        public ICollection<Photo> Photos {get; set;} = [];
     }
 }
