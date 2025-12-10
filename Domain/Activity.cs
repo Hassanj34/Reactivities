@@ -18,5 +18,6 @@ public class Activity
     public double Longitude { get; set; }
 
     //navigation props
-    public ICollection<ActivityAtendee> Attendees {get; set;} = [];
+    public ICollection<ActivityAtendee> Attendees { get; set; } = [];
+    public ICollection<Comment> Comments { get; set; } = [];
 }

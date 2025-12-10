@@ -29,7 +29,7 @@ export default function ActivityCard({activity}: Props) {
                 subheader={
                     <>
                         Hosted by {' '} 
-                        <Link to={`/profiles/${activity.hostId}`}>
+                        <Link to={`/profiles/${activity.hostId}`}> 
                             {activity.hostDisplayName}
                         </Link>
                     </>
@@ -57,7 +57,7 @@ export default function ActivityCard({activity}: Props) {
             <Divider  />
             <Box display='flex' gap={2} sx={{backgroundColor: 'grey.200', py: 3, pl: 3}}>
                 {activity.attendees.map(att => (
-                    <Box display='flex' flexDirection='column' alignItems='center' gap={0.5}>
+                    <Box key={att.id} display='flex' flexDirection='column' alignItems='center' gap={0.5}>
                         <AvatarPopover profile={att} key={att.id}/>
                         <Typography variant='caption'>{att.displayName}</Typography>
                     </Box>
