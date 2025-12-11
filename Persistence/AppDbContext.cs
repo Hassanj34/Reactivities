@@ -19,12 +19,14 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<User>(op
 
         builder.Entity<ActivityAtendee>(x => x.HasKey(a => new { a.ActivityId, a.UserId }));
 
-        builder.Entity<ActivityAtendee>()
+        builder
+            .Entity<ActivityAtendee>()
             .HasOne(x => x.User)
             .WithMany(x => x.Activities)
             .HasForeignKey(x => x.UserId);
 
-        builder.Entity<ActivityAtendee>()
+        builder
+            .Entity<ActivityAtendee>()
             .HasOne(x => x.Activity)
             .WithMany(x => x.Attendees)
             .HasForeignKey(x => x.ActivityId);
@@ -34,14 +36,14 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<User>(op
             x.HasKey(k => new { k.ObserverId, k.TargetId });
 
             x.HasOne(o => o.Observer)
-             .WithMany(f => f.Followings)
-             .HasForeignKey(o => o.ObserverId)
-             .OnDelete(DeleteBehavior.Cascade);
+                .WithMany(f => f.Followings)
+                .HasForeignKey(o => o.ObserverId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             x.HasOne(o => o.Target)
-             .WithMany(f => f.Followers)
-             .HasForeignKey(o => o.TargetId)
-             .OnDelete(DeleteBehavior.Cascade);
+                .WithMany(f => f.Followers)
+                .HasForeignKey(o => o.TargetId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         var dateTimeConverter = new ValueConverter<DateTime, DateTime>(

@@ -1,4 +1,3 @@
-using Domain;
 using MediatR;
 using Persistence;
 using AutoMapper;

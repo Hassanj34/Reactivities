@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Application.Activities.Commands;
 using Application.Activities.Queries;
 using Application.Profiles.Commands;
@@ -23,7 +19,9 @@ namespace API.Controllers
         [HttpGet("{userId}/photos")]
         public async Task<ActionResult<List<Photo>>> GetPhotosForUse(string userId)
         {
-            return HandleResult(await Mediator.Send(new GetProfilePhotos.Query { UserId = userId }));
+            return HandleResult(
+                await Mediator.Send(new GetProfilePhotos.Query { UserId = userId })
+            );
         }
 
         [HttpDelete("{photoId}/photos")]
@@ -35,7 +33,9 @@ namespace API.Controllers
         [HttpPut("{photoId}/setMain")]
         public async Task<ActionResult> SetMainPhoto(string photoId)
         {
-            return HandleResult(await Mediator.Send(new SetMainPhoto.Command { PhotoId = photoId }));
+            return HandleResult(
+                await Mediator.Send(new SetMainPhoto.Command { PhotoId = photoId })
+            );
         }
 
         [HttpGet("{userId}")]
@@ -53,13 +53,29 @@ namespace API.Controllers
         [HttpPost("{userId}/follow")]
         public async Task<ActionResult> FollowToggle(string userId)
         {
-            return HandleResult(await Mediator.Send(new FollowToggle.Command { TargetUserId = userId }));
+            return HandleResult(
+                await Mediator.Send(new FollowToggle.Command { TargetUserId = userId })
+            );
         }
 
         [HttpGet("{userId}/follow-list")]
         public async Task<ActionResult> GetFollowings(string userId, string predicate)
         {
-            return HandleResult(await Mediator.Send(new GetFollowings.Query { UserId = userId, Predicate = predicate }));
+            return HandleResult(
+                await Mediator.Send(
+                    new GetFollowings.Query { UserId = userId, Predicate = predicate }
+                )
+            );
+        }
+
+        [HttpGet("{userId}/activities")]
+        public async Task<IActionResult> GetUserActivities(string userId, string filter)
+        {
+            return HandleResult(
+                await Mediator.Send(
+                    new GetUserActivities.Query { UserId = userId, Filter = filter }
+                )
+            );
         }
     }
 }
