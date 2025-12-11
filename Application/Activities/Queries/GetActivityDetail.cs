@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application.Activities.DTOs;
 using Application.Core;
+using Application.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Domain;
@@ -20,12 +21,12 @@ namespace Application.Activities.Queries
             public required string Id { get; set; }
         }
 
-        public class Handler(AppDbContext context, IMapper mapper) : IRequestHandler<Query, Result<ActivityDTO>>
+        public class Handler(AppDbContext context, IMapper mapper, IUserAccessor userAccessor) : IRequestHandler<Query, Result<ActivityDTO>>
         {
             public async Task<Result<ActivityDTO>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var activity = await context.Activities
-                    .ProjectTo<ActivityDTO>(mapper.ConfigurationProvider)
+                    .ProjectTo<ActivityDTO>(mapper.ConfigurationProvider, new { currentUserId = userAccessor.GetUserId() })
                     .FirstOrDefaultAsync(x => request.Id == x.Id, cancellationToken);
 
                 if (activity == null) return Result<ActivityDTO>.Failure("Activity not found", 404);

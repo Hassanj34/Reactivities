@@ -13,16 +13,16 @@ namespace Persistence
         {
             var users = new List<User>
             {
-                new() {DisplayName = "Bob", UserName = "bob@test.com", Email = "bob@test.com"},
-                new() {DisplayName = "Tom", UserName = "tom@test.com", Email = "tom@test.com"},
-                new() {DisplayName = "Jane", UserName = "jane@test.com", Email = "jane@test.com"},
+                new() {Id = "bob-id", DisplayName = "Bob", UserName = "bob@test.com", Email = "bob@test.com"},
+                new() {Id = "tom-id", DisplayName = "Tom", UserName = "tom@test.com", Email = "tom@test.com"},
+                new() {Id = "jane-id", DisplayName = "Jane", UserName = "jane@test.com", Email = "jane@test.com"},
             };
 
             if (!userManager.Users.Any())
             {
                 foreach (var user in users)
                 {
-                    await userManager.CreateAsync(user, "Pa$$w0ord");
+                    await userManager.CreateAsync(user, "Pa$$w0rd");
                 }
             }
 

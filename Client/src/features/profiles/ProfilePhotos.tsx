@@ -45,7 +45,7 @@ export default function ProfilePhotos() {
       <Box display="flex" justifyContent="space-between">
         <Typography variant="h5">Photos</Typography>
         {isCurrentUser && (
-          <Button onClick={() => setEditMode(!editMode)}>
+          <Button onClick={() => setEditMode(!editMode)} disabled={uploadPhoto.isPending}>
             {editMode ? "Cancel" : "Add photo"}
           </Button>
         )}

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Activities.Commands;
+using Application.Activities.Queries;
 using Application.Profiles.Commands;
 using Application.Profiles.DTOs;
 using Application.Profiles.Queries;
@@ -46,6 +48,18 @@ namespace API.Controllers
         public async Task<ActionResult> UpdateProfile(EditProfile.Command command)
         {
             return HandleResult(await Mediator.Send(command));
+        }
+
+        [HttpPost("{userId}/follow")]
+        public async Task<ActionResult> FollowToggle(string userId)
+        {
+            return HandleResult(await Mediator.Send(new FollowToggle.Command { TargetUserId = userId }));
+        }
+
+        [HttpGet("{userId}/follow-list")]
+        public async Task<ActionResult> GetFollowings(string userId, string predicate)
+        {
+            return HandleResult(await Mediator.Send(new GetFollowings.Query { UserId = userId, Predicate = predicate }));
         }
     }
 }
