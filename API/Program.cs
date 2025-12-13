@@ -25,7 +25,7 @@ builder.Services.AddControllers(opt =>
 });
 builder.Services.AddDbContext<AppDbContext>(opt =>
 {
-    opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 builder.Services.AddCors();
@@ -40,23 +40,29 @@ builder.Services.AddScoped<IPhotoService, PhotoService>();
 builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 builder.Services.AddValidatorsFromAssemblyContaining<CreateActivityValidator>();
 builder.Services.AddTransient<ExceptionMiddleware>();
-builder.Services.AddIdentityApiEndpoints<User>(opt =>
-{
-    opt.User.RequireUniqueEmail = true;
-})
-.AddRoles<IdentityRole>()
-.AddEntityFrameworkStores<AppDbContext>();
+builder
+    .Services.AddIdentityApiEndpoints<User>(opt =>
+    {
+        opt.User.RequireUniqueEmail = true;
+    })
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.AddAuthorization(opt =>
 {
-    opt.AddPolicy("IsActivityHost", policy =>
-    {
-        policy.Requirements.Add(new IsHostRequirement());
-    });
+    opt.AddPolicy(
+        "IsActivityHost",
+        policy =>
+        {
+            policy.Requirements.Add(new IsHostRequirement());
+        }
+    );
 });
 
 builder.Services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
-builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+builder.Services.Configure<CloudinarySettings>(
+    builder.Configuration.GetSection("CloudinarySettings")
+);
 
 var app = builder.Build();
 
@@ -64,16 +70,26 @@ var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
 
-app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().AllowCredentials()
-    .WithOrigins("http://localhost:3000", "https://localhost:3000"));
+app.UseCors(options =>
+    options
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials()
+        .WithOrigins("http://localhost:3000", "https://localhost:3000")
+);
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 app.MapControllers();
 app.MapGroup("api").MapIdentityApi<User>();
 
 app.MapHub<CommentHub>("/comments");
+
+app.MapFallbackToController("Index", "Fallback");
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;

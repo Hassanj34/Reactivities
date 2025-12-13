@@ -11,7 +11,7 @@ const sleep = (delay: number) => {
 
 const agent = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
-  withCredentials: true
+  withCredentials: true,
 });
 
 agent.interceptors.request.use((config) => {
@@ -21,13 +21,13 @@ agent.interceptors.request.use((config) => {
 
 agent.interceptors.response.use(
   async (response) => {
-    await sleep(500);
+    if (import.meta.env.DEV) await sleep(500);
     store.uiStore.isIdle();
     return response;
   },
 
   async (error) => {
-    await sleep(500);
+    if (import.meta.env.DEV) await sleep(500);
     store.uiStore.isIdle();
 
     const { status, data } = error.response;
@@ -52,7 +52,7 @@ agent.interceptors.response.use(
         router.navigate("/not-found");
         break;
       case 500:
-        router.navigate("/server-error", {state: {error: data}});
+        router.navigate("/server-error", { state: { error: data } });
         break;
       default:
         break;
