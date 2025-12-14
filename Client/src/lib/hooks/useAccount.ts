@@ -95,7 +95,19 @@ export const useAccount = () => {
     },
     onSuccess: () => {
       toast.success("Password reset successfully - you can now sign in");
-      navigate('/login');
+      navigate("/login");
+    },
+  });
+
+  const fetchGitHubToken = useMutation({
+    mutationFn: async (code: string) => {
+      const respose = await agent.post(`/account/github-login?code=${code}`);
+      return respose.data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["user"],
+      });
     },
   });
 
@@ -110,5 +122,6 @@ export const useAccount = () => {
     changePassword,
     forgotPassword,
     resetPassword,
+    fetchGitHubToken,
   };
 };
