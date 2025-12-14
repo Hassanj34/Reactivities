@@ -89,5 +89,20 @@ namespace API.Controllers
 
             return NoContent();
         }
+
+        [HttpPost("change-password")]
+        public async Task<ActionResult> ChangePassword(ChangePasswordDTO changePasswordDTO)
+        {
+            var user = await signInManager.UserManager.GetUserAsync(User);
+
+            if (user == null) return Unauthorized();
+
+            var result = await signInManager.UserManager
+                .ChangePasswordAsync(user, changePasswordDTO.CurrentPassword, changePasswordDTO.NewPassword);
+
+            if (result.Succeeded) return Ok();
+
+            return BadRequest(result.Errors.First().Description);
+        }
     }
 }
