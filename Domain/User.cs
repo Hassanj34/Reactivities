@@ -7,6 +7,7 @@ namespace Domain
         public string? DisplayName { get; set; }
         public string? Bio { get; set; }
         public string? ImageUrl { get; set; }
+        public bool? IsNewSocialLogin {get; set;}
 
         //navigation props
         public ICollection<ActivityAtendee> Activities { get; set; } = [];

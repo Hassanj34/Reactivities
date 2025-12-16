@@ -3,13 +3,7 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
-import {
-  Avatar,
-  Box,
-  Divider,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
+import { Avatar, Box, Divider, ListItemIcon, ListItemText } from "@mui/material";
 import { useAccount } from "../../lib/hooks/useAccount";
 import { Link } from "react-router";
 import { Add, Logout, Password, Person } from "@mui/icons-material";
@@ -25,19 +19,15 @@ export default function UserMenu() {
     setAnchorEl(null);
   };
 
+  React.useEffect(() => {
+    console.log(currentUser);
+  }, [currentUser]);
+
   return (
     <>
-      <Button
-        color="inherit"
-        size="large"
-        sx={{ fontSize: "1.1rem" }}
-        onClick={handleClick}
-      >
+      <Button color="inherit" size="large" sx={{ fontSize: "1.1rem" }} onClick={handleClick}>
         <Box display="flex" alignItems="center" gap={2}>
-          <Avatar
-            src={currentUser?.imageUrl}
-            alt="current user image"  
-          />
+          <Avatar src={currentUser?.imageUrl} alt="current user image" />
           {currentUser?.displayName}
         </Box>
       </Button>
@@ -64,12 +54,14 @@ export default function UserMenu() {
           </ListItemIcon>
           <ListItemText>My Profile</ListItemText>
         </MenuItem>
-        <MenuItem component={Link} to={`/change-password`} onClick={handleClose}>
-          <ListItemIcon>
-            <Password />
-          </ListItemIcon>
-          <ListItemText>Change password</ListItemText>
-        </MenuItem>
+        {!currentUser?.isNewSocialLogin ? (
+          <MenuItem component={Link} to={`/change-password`} onClick={handleClose}>
+            <ListItemIcon>
+              <Password />
+            </ListItemIcon>
+            <ListItemText>Change password</ListItemText>
+          </MenuItem>
+        ) : null}
         <Divider />
         <MenuItem
           onClick={() => {

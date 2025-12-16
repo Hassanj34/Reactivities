@@ -78,7 +78,8 @@ namespace API.Controllers
                     Email = user.Email,
                     UserName = user.Email,
                     DisplayName = user.Name,
-                    ImageUrl = user.ImageUrl
+                    ImageUrl = user.ImageUrl,
+                    IsNewSocialLogin = true
                 };
 
                 var createdResult = await signInManager.UserManager.CreateAsync(existingUser);
@@ -158,7 +159,8 @@ namespace API.Controllers
                 user.DisplayName,
                 user.Email,
                 user.Id,
-                user.ImageUrl
+                user.ImageUrl,
+                user.IsNewSocialLogin
             });
         }
 
