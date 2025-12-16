@@ -40,7 +40,8 @@ export default function LoginForm() {
   const onSubmit = async (data: LoginSchema) => {
     await loginUser.mutateAsync(data, {
       onSuccess: () => {
-        navigate(location.state.from || "/activties");
+        const from = location.state?.from?.pathname || "/activities";
+        navigate(from);
       },
       onError: (error) => {
         if (error.message === "NotAllowed") {
