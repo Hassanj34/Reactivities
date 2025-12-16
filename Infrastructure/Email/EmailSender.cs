@@ -49,14 +49,16 @@ namespace Infrastructure.Email
         {
             var message = new EmailMessage
             {
-                From = "whatever@resend.dev",
+                From = "no-reply@resend.dev",
                 Subject = subject,
                 HtmlBody = body,
             };
 
             message.To.Add(email);
 
-            Console.WriteLine(message.HtmlBody);
+            // Disable tracking
+            message.Headers?.Add("X-Resend-Tracking-Click", "false");
+            message.Headers?.Add("X-Resend-Tracking-Open", "false");
 
             await resend.EmailSendAsync(message);
 
